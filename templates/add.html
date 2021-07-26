@@ -1,0 +1,48 @@
+{% extends "dashboard_base.html" %}
+{% block title%} {{ title }} {% endblock %}
+{% block content%}
+<div class="container row">
+    <div class="col-md-6">
+        <form action="{{request.path}}" method="POST" enctype="multipart/form-data">
+
+            {{ form.regno(class_="form-control",placeholder="Registration Number")}}
+            {% for error in form.regno.errors %}
+            <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ error }}
+            </div>
+            {% endfor%}
+            
+            {{ form.size(class_="form-control")}}
+            {% for error in form.size.errors %}
+            <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ error }}
+            </div>
+            {% endfor%}
+
+            <input name="image" type="file" id="upload" class="hidden" onchange="">
+            <div class="form-group mt-4">
+                {{ form.truck_img(class_="form-control-file") }}
+                {% if form.truck_img.errors %}
+                {% for error in form.truck_img.errors %}
+                <div class="alert alert-danger mt-2">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    {{ error }}<br>
+                </div>
+                {% endfor%}
+                {% endif %}
+            </div>
+
+            <div class="text-center mr-4">
+                <button class="btn w3-right btn-outline-primary rounded-pill" type="submit">Add Truck</button>
+            </div>
+
+
+        </form>
+    </div>
+    <div class="col-md-6">
+        <img src="/static/img/svgs/tow-truck.svg" class="img-fluid">
+    </div>
+</div>
+{% endblock%}
