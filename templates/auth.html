@@ -4,7 +4,7 @@
 <section id="auth">
     <div class="container">
         <div class="row mt-4">
-            <div class="col-lg-5 m-auto card">
+            <div class="col-lg-4 m-auto card">
                 <form action="{{ request.path }}" method="POST" class="card-body">
                     {{ form.csrf_token }}
                     {% with messages = get_flashed_messages(with_categories=true) %}
