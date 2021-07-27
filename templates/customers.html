@@ -1,0 +1,37 @@
+{% extends "dashboard_base.html" %}
+{% block title%} {{ title }} {% endblock %}
+{% block content%}
+<div class="container row">
+    <div class="col-md-12">
+        <h1 class="lead text-muted"> {{ title }} </h1>
+        <div class="table-responsive">
+            <table class="table table-borderless table-sm">
+                <thead>
+                    <tr>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Date Hired</th>
+                        <th scope="col">Truck Reg NO</th>
+                        <th scope="col">Truck Size</th>
+                    </tr>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for client in my_clients %}
+                    {% if client.truck.user_id == current_user %}
+                    <tr class="">
+                        <td> {{ client.phone_no }} </td>
+                        <td> {{ client.name }} </td>
+                        <td> {{ client.date_of_hire.strftime('%B %d,%Y %I:%M %p') }} </td>
+                        <td> {{ client.truck.regno }} </td>
+                        <td> {{ client.truck.size }} </td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock%}

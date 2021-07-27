@@ -23,6 +23,11 @@ class AddTruck(FlaskForm):
     regno = StringField(validators=[InputRequired(), Length(1, 64)])
 
 
+class HireTruck(FlaskForm):
+    id_no = StringField(validators=[InputRequired(), Length(8, 8)])
+    phone_no = StringField(validators=[InputRequired(), Length(10,10)])
+    name = StringField(validators=[InputRequired(), Length(1, 100)])
+    duration = StringField(validators=[InputRequired(), Length(1, 64)])
 
 
 

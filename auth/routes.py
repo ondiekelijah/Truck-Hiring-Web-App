@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from .forms import *
 from . import *
 from wtforms import ValidationError, validators
-from main_app import db, bcrypt, login_manager
+from app import db, bcrypt, login_manager
 from flask import current_app
 from flask_login import (
     UserMixin,

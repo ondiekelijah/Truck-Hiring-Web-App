@@ -3,6 +3,7 @@
 {% block content%}
 <div class="container row">
     <div class="col-md-12">
+        <h1 class="lead text-muted"> {{ title }} </h1>
         <div class="table-responsive">
             <table class="table table-borderless table-sm">
                 <thead>
@@ -16,12 +17,13 @@
                 </thead>
                 <tbody>
                     {% for truck in trucks %}
+                    {% if request.path == '/my_trucks' %}
                     <tr class="">
                         <td> {{ truck.regno }} </td>
                         <td> {{ truck.size }} </td>
                         <td>
                             <a data-toggle="collapse" href="#collapseExample-{{truck.id}}" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                <i class="bi bi-eye-fill"></i> View images
+                                images
                             </a>
                             <div class="collapse" id="collapseExample-{{truck.id}}">
                                 <img src="/static/img/trucks/{{truck.truck_img}}" alt="" class="img-fluid">
@@ -55,6 +57,49 @@
                         </td>
                         {% endif %}
                     </tr>
+                    {% else %}
+                    {% if truck.status == False %}
+                    <tr class="">
+                        <td> {{ truck.regno }} </td>
+                        <td> {{ truck.size }} </td>
+                        <td>
+                            <a data-toggle="collapse" href="#collapseExample-{{truck.id}}" role="button" aria-expanded="false" aria-controls="collapseExample">
+                               View images
+                            </a>
+                            <div class="collapse" id="collapseExample-{{truck.id}}">
+                                <img src="/static/img/trucks/{{truck.truck_img}}" alt="" class="img-fluid">
+                            </div>
+                        </td>
+                        {% if truck.user_id == current_user.id%}
+                        <td>
+                            <a type="button" href="{{ url_for('update_truck',truck_id = truck.id) }}" class="btn btn-primary btn-sm">Edit</a>
+                            <!-- Button trigger modal -->
+                            <a type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#exampleModal-{{truck.id}}">Delete</a>
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal-{{truck.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Delete Truck records</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Delete truck Reg No {{ truck.regno}} ?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</a>
+                                            <a type="button" href="{{ url_for('delete_truck',truck_id = truck.id) }}" class="btn btn-danger btn-sm">Delete</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endif %}
+                    {% endif %}
                     {% endfor %}
                 </tbody>
             </table>

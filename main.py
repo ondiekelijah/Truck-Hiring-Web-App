@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask import current_app
-from main_app import create_app
-from main_app import login_manager
+from app import create_app
+from app import login_manager
 from models import *
 from forms import *
 from utils import *
@@ -45,10 +45,61 @@ def load_user(user_id):
 
 # Home
 @app.route("/", methods=("GET", "POST"), strict_slashes=False)
-@login_required
 def index():
-    trucks = Trucks.query.order_by(Trucks.id.desc()).all()
+    form = HireTruck()
+    trucks = Trucks.query.order_by(Trucks.id.desc()).filter_by(status=False).all()
+    return render_template("index.html",
+        title="Mtruck | Home",
+        trucks=trucks,
+        form=form
+        )
+
+
+# Customers
+@app.route("/customers", methods=("GET", "POST"), strict_slashes=False)
+def customers():
+
+    my_clients = HiredTrucks.query.order_by(HiredTrucks.id.desc()).all()
+
+    return render_template("customers.html",
+        title="Mtruck | My Clients",
+        my_clients=my_clients,
+        )
+
+@app.route("/<int:truck_id>/hire", methods=("GET", "POST"), strict_slashes=False)
+def hire(truck_id):
+    form = HireTruck()
+    truck = Trucks.query.filter_by(id=truck_id).first()
+
+    id_no = form.id_no.data
+    phone_no = form.phone_no.data
+    name = form.name.data
+    duration = form.duration.data
+    truck_id = truck.id
+    truck.status = not truck.status
+
+    hired_truck = HiredTrucks(
+        id_no=id_no,
+        phone_no=phone_no,
+        name=name,
+        duration=duration,
+        truck_id=truck_id,
+        status = truck.status
+        )
+
+    db.session.add(hired_truck)
+
+    hired_truck = Trucks(
+        status = truck.status
+        )
+
+    db.session.commit()
+
+    flash("Request Sent,we will contact you soon", "success")
+    return redirect(url_for("index"))
+
     return render_template("index.html",title="Mtruck | Home",trucks=trucks)
+
 
 @app.route("/dashboard", methods=("GET", "POST"), strict_slashes=False)
 @login_required
@@ -65,14 +116,27 @@ def trucks():
     trucks=trucks
     )
 
+@app.route("/hired_trucks", methods=("GET", "POST"), strict_slashes=False)
+@login_required
+def hired_trucks():
+    trucks = HiredTrucks.query.order_by(HiredTrucks.id.desc()).all()
+    
+    return render_template("hired.html",
+    title="Mtruck | Hired Trucks",
+    trucks=trucks
+    )
+
+
 @app.route("/my_trucks", methods=("GET", "POST"), strict_slashes=False)
 @login_required
 def my_trucks():
     trucks = Trucks.query.filter_by(user_id=current_user.id).all()
+
     return render_template("trucks.html",
     title="Mtruck | Trucks",
     trucks=trucks
     )
+    
 @app.route("/<int:truck_id>/update",
     methods=("GET", "POST"),
     strict_slashes=False,

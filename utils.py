@@ -27,10 +27,3 @@ def upload_img(post_img):
     )
     post_img.save(picture_path)
     return picture_filename
-
-# redirects
-def redirect_url(default='index'):
-    return request.args.get('next') or \
-           request.referrer or \
-           url_for(default)
-           

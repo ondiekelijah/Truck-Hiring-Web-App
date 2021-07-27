@@ -28,24 +28,27 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                 </li>
+                {% if current_user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Client Area</a>
+                    <a class="nav-link" href="{{url_for('dashboard')}}"> {{ current_user.uname }} </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{url_for('dashboard')}}">Owners Area</a>
+                    <a class="nav-link" href="{{url_for('dashboard')}}">My Account</a>
                 </li>
-                                <li class="nav-item">
-                    <a class="nav-link" href="{{url_for('dashboard')}}">Login</a>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url_for('auth.register')}}">Join Us</a>
                 </li>
-                                <li class="nav-item">
-                    <a class="nav-link" href="{{url_for('dashboard')}}">Contact</a>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
                 </li>
             </ul>
         </div>
     </nav>
     <main>
         <div class="container text-center">
-            <h1 class="text-white p-5 hero-text">Trucks for Hire</h1>
+            <h1 class="p-5 hero-text">Trucks for Hire</h1>
         </div>
         <div class="row mb-5">
             <div class="col-lg-8 mx-auto">
@@ -65,10 +68,23 @@
                 </div>
             </div>
         </div>
-        <div class="container row bg-white shadow p-5">
-                    <div class="container text-center">
-            <h3 class="">Available Trucks</h3>
-        </div>
+        <div class="row bg-white shadow p-5">
+            <div class="container text-center">
+                <h3 class="">Available Trucks</h3>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+            </div>
             <div class="col-md-12">
                 <div class="table-responsive">
                     <table class="table table-borderless table-sm">
@@ -87,16 +103,63 @@
                                 <td> {{ truck.size }} </td>
                                 <td>
                                     <a data-toggle="collapse" href="#collapseExample-{{truck.id}}" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                        <i class="bi bi-eye-fill"></i> View images
+                                        View images
                                     </a>
                                     <div class="collapse" id="collapseExample-{{truck.id}}">
                                         <img src="/static/img/trucks/{{truck.truck_img}}" alt="" class="img-fluid">
                                     </div>
                                 </td>
                                 <td>
-                                    <a data-toggle="collapse" href="#">
+                                    <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#hire-{{truck.id}}" role="button" aria-expanded="false" aria-controls="collapseExample">
                                         <i class="bi bi-check2-circle"></i> Hire
                                     </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">
+                                    <div class="collapse" id="hire-{{truck.id}}">
+                                        <div class="card card-body">
+                                            <form class="form-inline" action="{{ url_for('hire',truck_id=truck.id) }}" method="POST">
+                                                {{ form.csrf_token }}
+                                                <div class="form-group mb-2">
+                                                    {{ form.id_no(class="form-control" ,placeholder="ID number")}}
+                                                </div>
+                                                {% for error in form.id_no.errors %}
+                                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                                    {{ error }}
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                </div>
+                                                {% endfor%}
+                                                <div class="form-group mx-sm-3 mb-2">
+                                                    {{ form.name(class="form-control" ,placeholder="Full Name")}}
+                                                </div>
+                                                {% for error in form.name.errors %}
+                                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                                    {{ error }}
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                </div>
+                                                {% endfor%}
+                                                <div class="form-group mx-sm-3 mb-2">
+                                                    {{ form.phone_no(class="form-control" ,placeholder="Phone No. 07...")}}
+                                                </div>
+                                                {% for error in form.phone_no.errors %}
+                                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                                    {{ error }}
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                </div>
+                                                {% endfor%}
+                                                <div class="form-group mx-sm-3 mb-2">
+                                                    {{ form.duration(class="form-control" ,placeholder="Duration")}} </div>
+                                                {% for error in form.duration.errors %}
+                                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                                    {{ error }}
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                </div>
+                                                {% endfor%}
+                                                <button type="submit" class="btn btn-primary mb-2 btn-sm">Send</button>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                             {% endfor %}

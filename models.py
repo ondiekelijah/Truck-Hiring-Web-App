@@ -1,4 +1,4 @@
-from main_app import db ,migrate,login_manager,search
+from app import db ,migrate,login_manager,search
 from flask_login import UserMixin, AnonymousUserMixin
 from flask_bcrypt import Bcrypt
 from datetime import datetime,timezone
@@ -119,4 +119,23 @@ class Trucks(db.Model):
 
     def __repr__(self):
         return "<Post %r>" % self.regno
+
+class HiredTrucks(db.Model):
+    __tablename__ = "hired_trucks"
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    id_no = db.Column(db.String(8), unique=True, nullable=False, index=True)
+    phone_no = db.Column(db.String(10), unique=True, nullable=False)
+    name = db.Column(db.String(20), nullable=False)
+    duration = db.Column(db.String(20), nullable=False)
+    date_of_hire = db.Column(db.DateTime(), default=datetime.utcnow)
+
+    truck_id = db.Column(db.Integer, db.ForeignKey("trucks.id"), nullable=False)
+    truck = db.relationship("Trucks", backref=db.backref("truck"), lazy=True)
+
+    status = db.Column(db.Boolean, default=False)
+
+    def __repr__(self):
+        return "<Post %r>" % self.id_no
 

@@ -22,21 +22,21 @@
             <div class="col-md-3 col-lg-2 px-0 position-fixed h-100 bg-white shadow sidebar" id="sidebar">
                 <h1 class="<bi bi-truck text-primary d-flex my-4 justify-content-center"></h1>
                 <div class="list-group rounded-0">
-                    <a href="#" class="list-group-item list-group-item-action active border-0 d-flex align-items-center">
+                    <a href="{{url_for('dashboard')}}" class="list-group-item list-group-item-action active border-0 d-flex align-items-center">
                         <span class="bi bi-border-all"></span>
                         <span class="ml-2">Dashboard</span>
                     </a>
-                    <a href="#" class="list-group-item list-group-item-action border-0 align-items-center">
+                    <a href="{{url_for('trucks')}}" class="list-group-item list-group-item-action border-0 align-items-center">
                         <span class="bi bi-truck-flatbed"></span>
                         <span class="ml-2">Available trucks</span>
                     </a>
-                    <a href="#" class="list-group-item list-group-item-action border-0 align-items-center">
+                    <a href="{{url_for('hired_trucks')}}" class="list-group-item list-group-item-action border-0 align-items-center">
                         <span class="bi bi-clipboard-check"></span>
                         <span class="ml-2">Hired trucks</span>
                     </a>
-                    <a href="#" class="list-group-item list-group-item-action border-0 align-items-center">
+                    <a href="{{ url_for('customers')}}" class="list-group-item list-group-item-action border-0 align-items-center">
                         <span class="bi bi-person"></span>
-                        <span class="ml-2">Customers</span>
+                        <span class="ml-2">My Clients</span>
                     </a>
                     <a href="{{url_for('add')}}" class="list-group-item list-group-item-action border-0 align-items-center">
                         <span class="bi bi-folder-plus"></span>
@@ -75,33 +75,6 @@
                 </nav>
                 <!-- main content -->
                 <main class="container-fluid">
-                    <section class="row">
-                        <div class="col-md-6 col-lg-4">
-                            <!-- card -->
-                            <article class="p-4 rounded shadow-sm border-left
-               mb-4">
-                                <a href="{{url_for('trucks')}}" class="d-flex align-items-center">
-                                    <span class="bi bi-truck-flatbed h5"></span>
-                                    <h5 class="ml-2">Total</h5>
-                                </a> </article>
-                        </div>
-                        <div class="col-md-6 col-lg-4">
-                            <article class="p-4 rounded shadow-sm border-left mb-4">
-                                <a href="#" class="d-flex align-items-center">
-                                    <span class="bi bi-check2-circle h5"></span>
-                                    <h5 class="ml-2">Available</h5>
-                                </a>
-                            </article>
-                        </div>
-                        <div class="col-md-6 col-lg-4">
-                            <article class="p-4 rounded shadow-sm border-left mb-4">
-                                <a href="#" class="d-flex align-items-center">
-                                    <span class="bi bi-bookmark-check-fill h5"></span>
-                                    <h5 class="ml-2">Hired</h5>
-                                </a>
-                            </article>
-                        </div>
-                    </section>
                     <div class="jumbotron jumbotron-fluid rounded bg-white border-0 shadow border-left px-4">
                         <div class="m-4">
                             {% with messages = get_flashed_messages(with_categories=true) %}
