@@ -21,6 +21,8 @@ py -3 -m venv venv
 **macOS/Linux**
           
 ```
+git clone https://github.com/Dev-Elie/Truck-Hiring-Web-App.git
+
 cd Truck-Hiring-Web-App
 
 python3 -m venv venv
